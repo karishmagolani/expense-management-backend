@@ -1,0 +1,36 @@
+{
+  "name": "expense-management-system",
+  "version": "1.0.0",
+  "description": "Backend for expense management system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/karishmagolani/expense-management-backend.git"
+  },
+  "keywords": [
+    "expense",
+    "management",
+    "system"
+  ],
+  "author": "Karishma Golani",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/karishmagolani/expense-management-backend/issues"
+  },
+  "homepage": "https://github.com/karishmagolani/expense-management-backend#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.0.13"
+  }
+}
