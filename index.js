@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const userRoutes = require("./routes/user.routes");
+const expenseRoutes = require("./routes/expenses.routes");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
@@ -35,3 +36,5 @@ app.use(bodyParser.json());
 
 // User Routes
 app.use("/user", userRoutes);
+// Expenses Routes
+app.use("/expenses", expenseRoutes);
