@@ -3,6 +3,8 @@ const express = require("express");
 const cors = require("cors");
 const userRoutes = require("./routes/user.routes");
 const expenseRoutes = require("./routes/expenses.routes");
+const expenseCategoriesRoutes = require("./routes/expense_categories.routes");
+
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
@@ -38,3 +40,5 @@ app.use(bodyParser.json());
 app.use("/user", userRoutes);
 // Expenses Routes
 app.use("/expenses", expenseRoutes);
+// Expense categories Routes
+app.use("/expense-categories", expenseCategoriesRoutes);

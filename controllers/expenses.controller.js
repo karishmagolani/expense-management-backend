@@ -1,4 +1,5 @@
 const { Expenses } = require("../models/expenses");
+const { ExpenseCategories } = require("../models/expense_categories");
 const jwt = require("jsonwebtoken");
 const { verify_user } = require("./user.controller");
 
@@ -44,10 +45,23 @@ const add_expense = (req, res) => {
 
 const get_expenses_by_filters = (req, res) => {
   const { category_ids, date, skip, limit, order } = req.body;
+  console.log("HERE", req.body);
   verify_user(req, res, () => {
     Expenses.find({ user_id: req.user.id, category_id: category_ids })
       .then((res) => {
         console.log(res);
+        Promise.all(
+          res.map(async (item) => {
+            if (item.category_id)
+              ExpenseCategories.findOne({ _id: item.category_id }).then(
+                (category) => {
+                  console.log("id", item.category_id, category);
+
+                  console.log(category);
+                }
+              );
+          })
+        );
       })
       .catch((err) => {
         console.log(err);
