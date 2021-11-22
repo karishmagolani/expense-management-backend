@@ -2,8 +2,6 @@ const { User } = require("../models/user");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const secret = process.env.JWT_SECRET;
-
 const get_all_users = (req, res) => {
   User.find()
     .sort({ createdAt: -1 })
@@ -50,6 +48,7 @@ const register_user = async (req, res) => {
 
 const login_user = async (req, res) => {
   const user = req.body;
+  console.log("here", req.body);
   User.findOne({ email: user.email }).then((userFound) => {
     if (!userFound) {
       return res.status(500).send({ message: "Invalid username or password" });
@@ -61,7 +60,7 @@ const login_user = async (req, res) => {
         name: userFound.name,
       };
       if (success) {
-        jwt.sign(payload, secret, {}, function (err, token) {
+        jwt.sign(payload, process.env.JWT_SECRET, {}, function (err, token) {
           if (err) {
             return res.status(500).send({ message: err });
           }
@@ -79,7 +78,7 @@ const login_user = async (req, res) => {
 const verify_user = (req, res, next) => {
   const token = req.headers["x-access-token"]?.split(" ")[1];
   if (token) {
-    jwt.verify(token, secret, function (err, decoded) {
+    jwt.verify(token, process.env.JWT_SECRET, function (err, decoded) {
       if (err) {
         return res.status(500).send({ message: err });
       }

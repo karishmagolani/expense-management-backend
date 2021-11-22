@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
-const projectRoutes = require("./routes/user.routes");
+const userRoutes = require("./routes/user.routes");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 
@@ -34,4 +34,4 @@ app.listen(PORT, () =>
 app.use(bodyParser.json());
 
 // User Routes
-app.use("/user", projectRoutes);
+app.use("/user", userRoutes);
