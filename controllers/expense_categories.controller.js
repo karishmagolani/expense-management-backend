@@ -19,13 +19,14 @@ const get_all_categories = (req, res) => {
 };
 
 const add_category = (req, res) => {
-  const { category_name, remarks } = req.body;
+  const { category_name, remarks, color } = req.body;
   verify_user(req, res, () => {
     console.log("USER", req.user);
     const newCategory = new ExpenseCategories({
       user_id: req.user.id,
       category_name: category_name,
       remarks: remarks,
+      color: color,
     });
     newCategory.save(function (err) {
       if (err) {

@@ -23,13 +23,14 @@ const get_all_expenses = (req, res) => {
 const add_expense = (req, res) => {
   const { expense_name, amount, remarks, category_id, date } = req.body;
   verify_user(req, res, () => {
-    console.log("USER", req.user);
+    console.log("USER", req.user, req.body);
     const newExpense = new Expenses({
       user_id: req.user.id,
       expense_name: expense_name,
       amount: amount,
       remarks: remarks,
       category_id: category_id,
+
       date: date,
     });
     newExpense.save(function (err) {
@@ -45,26 +46,44 @@ const add_expense = (req, res) => {
 
 const get_expenses_by_filters = (req, res) => {
   const { category_ids, date, skip, limit, order } = req.body;
-  console.log("HERE", req.body);
+  console.log("HERE", category_ids, req.body);
   verify_user(req, res, () => {
-    Expenses.find({ user_id: req.user.id, category_id: category_ids })
-      .then((res) => {
-        console.log(res);
-        Promise.all(
-          res.map(async (item) => {
-            if (item.category_id)
-              ExpenseCategories.findOne({ _id: item.category_id }).then(
-                (category) => {
-                  console.log("id", item.category_id, category);
+    console.log("HERE", category_ids);
 
-                  console.log(category);
-                }
-              );
+    var query = {
+      user_id: req.user.id,
+    };
+    if (category_ids) {
+      query.category_id = { $in: category_ids };
+    }
+    if (date) {
+      query.date = {
+        $gte: new Date(date.gte).toISOString(),
+        $lt: new Date(date.lt).toISOString(),
+      };
+    }
+    console.log("QUERY", query);
+    Expenses.find(query)
+      .sort({ date: order == "asc" ? 1 : -1 })
+      .then(async (result) => {
+        await Promise.all(
+          result.map(async (item, index) => {
+            const newItem = item;
+
+            const category = item.category_id
+              ? await ExpenseCategories.findOne({
+                  _id: item.category_id,
+                })
+              : null;
+            result[index] = { ...newItem._doc, category };
           })
         );
+        console.log("----", result);
+        return res.send(result);
       })
       .catch((err) => {
         console.log(err);
+        return res.status(500).send(err);
       });
   });
 };

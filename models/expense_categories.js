@@ -6,6 +6,7 @@ const expenseCategoriesSchema = new Schema(
     user_id: { type: String, required: true },
     category_name: { type: String, required: true },
     remarks: { type: String },
+    color: { type: String },
   },
   {
     timestamps: true,
